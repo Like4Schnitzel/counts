@@ -1,2 +1,18 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    async function get() {
+        const response = await fetch('./api', {
+            method: 'GET'
+        })
+        console.log(await response.json());
+    }
+    
+    async function post() {
+        const response = await fetch('./api', {
+            method: 'POST'
+        });
+        console.log(await response.json());
+    }
+</script>
+
+<button on:click={get}>GET</button>
+<button on:click={post}>POST</button>
