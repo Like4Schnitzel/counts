@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
             return json({ message: "Username already exists." }, { status: 400 });
         }
 
-        db.run(`
+        await db.run(`
             INSERT INTO Users (name, password) VALUES (?, ?)
         `, body.username, sha512(body.password));
         return json({ user: body }, { status: 200 });

@@ -24,12 +24,12 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
         let session: Session | undefined = await db.get(`SELECT * FROM Sessions WHERE user = ?`, body.username);
         if (session && new Date() > session.expiresBy) {
-            db.run(`DELETE FROM Sessions WHERE id = ?`, session.id);
+            await db.run(`DELETE FROM Sessions WHERE id = ?`, session.id);
             session = undefined;
         }
         if (!session) {
             session = generateSession(body.username);
-            db.run(`INSERT INTO Sessions (id, user, expires_by) VALUES (?, ?, ?)`,
+            await db.run(`INSERT INTO Sessions (id, user, expires_by) VALUES (?, ?, ?)`,
                 session.id, session.user, session.expiresBy
             );
         }
