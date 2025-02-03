@@ -1,6 +1,6 @@
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 import { openDb } from "$lib/db";
-import { sha256 } from 'js-sha256';
+import { sha512 } from 'js-sha512';
 import type { LogInBody } from "$lib/types";
 import { handleServerError } from "$lib";
 
@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ request }) => {
             return json({ message: "Username and password may not be empty." }, { status: 400 });
         }
 
-        if (body.username !== body.username.trim() || body.password !== body.password.trim()) {
+        if (body.username !== body.username.trim()) {
             return json({ message: "There may not be trailing or leading whitespace." }, { status: 400 });
         }
 
@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
         db.run(`
             INSERT INTO Users (name, password) VALUES (?, ?)
-        `, body.username, sha256(body.password));
+        `, body.username, sha512(body.password));
         return json({ user: body }, { status: 200 });
     } catch (e) {
         return handleServerError(e);
