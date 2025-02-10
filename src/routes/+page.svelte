@@ -1,31 +1,25 @@
 <script lang="ts">
-    import { fromHexString } from "$lib";
-    import * as aesjs from "aes-js";
+    import { aesDecryptString512, aesEncryptString512 } from "$lib";
 
     async function get() {
         const response = await fetch('./api', {
             method: 'GET',
             credentials: "include"
         })
-        console.log(await response.json());
+        const data = await response.json();
+        const encryptionKey = localStorage.getItem("data-encryption-key");
+        for (const counter of data.counters) {
+            const encryptedLabel = counter.label;
+            const decryptedLabel = aesDecryptString512(encryptedLabel, encryptionKey!);
+            console.log(decryptedLabel);
+        }
     }
 
     async function addCounter(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement}) {
         const form = new FormData(event.currentTarget);
         const label: string = form.get("label") as string;
         const encryptionKey = localStorage.getItem("data-encryption-key");
-        const leftKeyHalf = encryptionKey!.slice(0, 64);
-        const rightKeyHalf = encryptionKey!.slice(64);
-        const leftBuffer = fromHexString(leftKeyHalf);
-        const rightBuffer = fromHexString(rightKeyHalf);
-
-        const labelBytes = aesjs.utils.utf8.toBytes(label);
-        const aesCtrLeft = new aesjs.ModeOfOperation.ctr(leftBuffer!);
-        const aesCtrRight = new aesjs.ModeOfOperation.ctr(rightBuffer!);
-
-        const encryptedLabelStepOne = aesCtrLeft.encrypt(labelBytes);
-        const encryptedLabelStepTwo = aesCtrRight.encrypt(encryptedLabelStepOne);
-        const encryptedLabelHex = aesjs.utils.hex.fromBytes(encryptedLabelStepTwo);
+        const encryptedLabelHex = aesEncryptString512(label, encryptionKey!);
 
         const response = await fetch('./api', {
             method: 'POST',
