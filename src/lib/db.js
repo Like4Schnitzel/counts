@@ -15,15 +15,18 @@ export async function openDb () {
     password NVARCHAR(256)
   );
   CREATE TABLE IF NOT EXISTS Counters (
-    label VARCHAR(64) PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    label VARCHAR(64),
     user VARCHAR(32),
+    visibility TEXT,
     FOREIGN KEY(user) REFERENCES Users(name)
   );
   CREATE TABLE IF NOT EXISTS Reasons (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     counter VARCHAR(64),
-    reason VARCHAR(2000),
+    reason TEXT,
     weight REAL,
+    unit TEXT,
     culprit VARCHAR(32),
     FOREIGN KEY(counter) REFERENCES Counters(label)
   );

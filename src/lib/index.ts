@@ -26,3 +26,9 @@ export function generateSession(user: string): Session {
 export function prefixAndHash(pw: string) {
     return sha512(`transrights<3_${pw}`);
 }
+
+export function fromHexString(hexString: string): Uint8Array | null {
+    const match = hexString.match(/.{1,2}/g);
+    if (!match) return null;
+    return Uint8Array.from(match.map((byte) => parseInt(byte, 16)));
+}
