@@ -10,13 +10,30 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
     try {
         const allCounters: Counter[] = [];
         const sessionId = cookies.get('session-id');
-        const rawCounters = await db.get(`
-            SELECT * 
+        // TODO this is so gonna break once I have reasons. live laugh race condition.
+        await db.each(`
+            SELECT label, Sessions.user, visibility, Counters.id
             FROM Users
                 INNER JOIN Sessions ON Sessions.id = ? AND Sessions.user = name
-                INNER JOIN Counters ON 1 = 1
-        `, sessionId);
-        console.log(rawCounters);
+                INNER JOIN Counters ON Counters.user = Users.name
+        `, sessionId, (err, row) => {
+            if (err) console.log(err);
+            const counter: Counter = {
+                label: row.label,
+                user: row.user,
+                visibility: row.visibility,
+                reasons: []
+            };
+            db.each(`
+                SELECT *
+                FROM Reasons WHERE id = ?
+                `, row.id, (err, row) => {
+                    if (err) console.log(err);
+                    counter.reasons.push(row);
+                });
+            allCounters.push(counter);
+        });
+        //await new Promise((res, rej) => setTimeout(res, 300));
         return json({ counters: allCounters }, { status: 200 });
     } catch (e: unknown) {
         console.error(e);
@@ -37,9 +54,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             visibility: "PRIVATE",
             reasons: []
         }
-        console.log(await db.run(`INSERT INTO Counters (label, user, visibility) VALUES (?, ?, ?);`,
-                newCounter.label, newCounter.user, newCounter.visibility
-            )
+        await db.run(`INSERT INTO Counters (label, user, visibility) VALUES (?, ?, ?);`,
+            newCounter.label, newCounter.user, newCounter.visibility
         );
         return json({ status: 200 });
     } catch (e) {

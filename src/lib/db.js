@@ -23,12 +23,12 @@ export async function openDb () {
   );
   CREATE TABLE IF NOT EXISTS Reasons (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    counter VARCHAR(64),
+    counter INTEGER,
     reason TEXT,
     weight REAL,
     unit TEXT,
     culprit VARCHAR(32),
-    FOREIGN KEY(counter) REFERENCES Counters(label)
+    FOREIGN KEY(counter) REFERENCES Counters(id)
   );
   CREATE TABLE IF NOT EXISTS Sessions (
     id TEXT PRIMARY KEY,
