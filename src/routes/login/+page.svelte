@@ -17,7 +17,7 @@
                 return;
             }
 
-            const response = await fetch('../api/login', {
+            const response = await fetch('?/login', {
                 method: "POST",
                 body: JSON.stringify({
                     username,
@@ -48,7 +48,7 @@
                 return;
             }
 
-            const response = await fetch('../api/signup', {
+            const response = await fetch('?/signup', {
                 method: "POST",
                 body: JSON.stringify({
                     username,

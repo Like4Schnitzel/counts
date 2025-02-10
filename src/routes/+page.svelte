@@ -21,7 +21,7 @@
         const encryptionKey = localStorage.getItem("data-encryption-key");
         const encryptedLabelHex = aesEncryptString512(label, encryptionKey!);
 
-        const response = await fetch('./api', {
+        const response = await fetch('?/addCounter', {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify({

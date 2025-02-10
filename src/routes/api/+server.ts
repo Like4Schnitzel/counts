@@ -19,6 +19,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
         `, sessionId, (err, row) => {
             if (err) console.log(err);
             const counter: Counter = {
+                id: row.id,
                 label: row.label,
                 user: row.user,
                 visibility: row.visibility,
@@ -41,24 +42,3 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
         return json({ message: errorMessage }, { status: 500 });
     }
 }
-
-export const POST: RequestHandler = async ({ request, cookies }) => {
-    try {
-        const body = await request.json();
-        const label = body.label;
-        const sessionId = cookies.get('session-id');
-        const username = (await db.get(`SELECT name FROM Users INNER JOIN Sessions ON id = ? AND user = name;`, sessionId)).name;
-        const newCounter: Counter = {
-            label,
-            user: username,
-            visibility: "PRIVATE",
-            reasons: []
-        }
-        await db.run(`INSERT INTO Counters (label, user, visibility) VALUES (?, ?, ?);`,
-            newCounter.label, newCounter.user, newCounter.visibility
-        );
-        return json({ status: 200 });
-    } catch (e) {
-        return handleServerError(e);
-    }
-};

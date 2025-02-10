@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { fail, json } from "@sveltejs/kit";
 import type { Session } from "./types";
 import { sha512 } from "js-sha512";
 import * as aesjs from 'aes-js';
@@ -6,7 +6,7 @@ import * as aesjs from 'aes-js';
 export function handleServerError(e: unknown) {
     console.error(e);
     let errorMessage = e instanceof Error ? e.message : null;
-    return json({ message: errorMessage }, { status: 500 });
+    return fail(500, { message: errorMessage });
 }
 
 export function generateSession(user: string): Session {
