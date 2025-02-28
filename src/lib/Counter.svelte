@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { aesEncryptString512 } from "$lib";
     import Reason from "./Reason.svelte";
     import type { Counter } from "./types";
 
@@ -7,11 +8,13 @@
     // TODO add transaction id or some shit so ws updates dont update the thing that was just locally changed
     async function addReason(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement}) {
         event.preventDefault();
+        const encryptionKey = localStorage.getItem("data-encryption-key")!;
+
         const form = new FormData(event.currentTarget);
         const weight = form.get("weight");
-        const unit = form.get("unit");
-        const reason = form.get("reason");
-        const culprit = form.get("culprit");
+        const unit = aesEncryptString512(form.get("unit") as string, encryptionKey);
+        const reason = aesEncryptString512(form.get("reason") as string, encryptionKey);
+        const culprit = aesEncryptString512(form.get("culprit") as string, encryptionKey);
 
         const response = await fetch('/?/addReason', {
             method: 'POST',
