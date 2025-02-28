@@ -18,7 +18,7 @@ export function generateSession(user: string): Session {
         now.toString(36);
     
     return {
-        expiresBy: new Date(expiresBy),
+        expires_by: new Date(expiresBy),
         id,
         user
     }
@@ -68,4 +68,13 @@ export function aesDecryptString512(encrypted: string, key: string) {
     const decryptedStepTwo = aesCtrLeft.decrypt(decryptedStepOne);
     const decryptedString = aesjs.utils.utf8.fromBytes(decryptedStepTwo);
     return decryptedString;
+}
+
+export function sendFormActionData(data: Object) {
+    return JSON.stringify(data);
+}
+
+export function readFormActionData(data: any) {
+    console.log(data);
+    return JSON.parse(JSON.parse(data.data)[0]);
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { prefixAndHash } from "$lib";
+    import { prefixAndHash, readFormActionData } from "$lib";
     import { sha512 } from "js-sha512";
 
     let usernameLogIn: string;
@@ -24,7 +24,7 @@
                     password: sha512(password)
                 })
             });
-            const body = await response.json();
+            const body = readFormActionData(await response.json());
             console.log(response.status, body);
             if (response.status === 200) {
                 logInError = "";

@@ -11,12 +11,13 @@ export type UserRow = {
 export type Session = {
     id: string,
     user: string,
-    expiresBy: Date
+    expires_by: Date
 }
 
 export type Reason = {
     id: number,
-    counter: string,
+    counter_id: number,
+    added_at: Date,
     reason: string,
     weight: number,
     unit: string,
@@ -24,8 +25,9 @@ export type Reason = {
 }
 
 export type Counter = {
+    id: number,
     label: string,
     user: string,
-    visibility: string,
+    visibility: "PRIVATE" | "PROTECTED" | "PUBLIC",
     reasons: Reason[]
 }

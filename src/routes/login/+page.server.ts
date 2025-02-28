@@ -1,4 +1,4 @@
-import { generateSession, handleServerError } from "$lib";
+import { generateSession, handleServerError, sendFormActionData } from "$lib";
 import { openDb } from "$lib/db";
 import type { LogInBody, Session } from "$lib/types";
 import { fail } from "@sveltejs/kit";
@@ -25,7 +25,7 @@ export const actions = {
             await db.run(`
                 INSERT INTO Users (name, password) VALUES (?, ?)
             `, body.username, sha512(body.password));
-            return { user: body };
+            return sendFormActionData({ user: body });
         } catch (e) {
             return handleServerError(e);
         }
@@ -47,26 +47,27 @@ export const actions = {
             }
     
             let session: Session | undefined = await db.get(`SELECT * FROM Sessions WHERE user = ?`, body.username);
-            if (session && new Date() > session.expiresBy) {
+            if (session && new Date() > session.expires_by) {
                 await db.run(`DELETE FROM Sessions WHERE id = ?`, session.id);
                 session = undefined;
             }
             if (!session) {
                 session = generateSession(body.username);
                 await db.run(`INSERT INTO Sessions (id, user, expires_by) VALUES (?, ?, ?)`,
-                    session.id, session.user, session.expiresBy
+                    session.id, session.user, session.expires_by
                 );
             }
-    
+
+            const maxAge = Math.floor((new Date(session.expires_by).getTime() - Date.now()) / 1000);
             cookies.set("session-id", session.id, {
                 httpOnly: true,
                 sameSite: 'strict',
                 secure: true,
                 path: '/',
-                maxAge: 60*60*24
+                maxAge
             });
     
-            return { session };
+            return sendFormActionData({ session });
         } catch (e) {
             return handleServerError(e);
         }

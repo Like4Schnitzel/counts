@@ -28,6 +28,7 @@ export async function openDb () {
     weight REAL,
     unit TEXT,
     culprit VARCHAR(32),
+    added_at INTEGER,
     FOREIGN KEY(counter) REFERENCES Counters(id)
   );
   CREATE TABLE IF NOT EXISTS Sessions (

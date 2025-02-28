@@ -1,18 +1,35 @@
 <script lang="ts">
     import { aesDecryptString512, aesEncryptString512 } from "$lib";
+    import Counter from "$lib/Counter.svelte";
+    import type { Counter as CounterType } from "$lib/types.ts";
 
     async function get() {
         const response = await fetch('./api', {
             method: 'GET',
             credentials: "include"
         })
+        counters = [];
         const data = await response.json();
         const encryptionKey = localStorage.getItem("data-encryption-key");
-        for (const counter of data.counters) {
-            const encryptedLabel = counter.label;
-            const decryptedLabel = aesDecryptString512(encryptedLabel, encryptionKey!);
-            console.log(decryptedLabel);
+        for (const counter of data.counters as CounterType[]) {
+            let decryptedLabel;
+            if (counter.visibility === "PRIVATE") {
+                const encryptedLabel = counter.label;
+                decryptedLabel = aesDecryptString512(encryptedLabel, encryptionKey!);
+            } else {
+                decryptedLabel = counter.label;
+            }
+            
+            counters.push({
+                id: counter.id,
+                label: decryptedLabel,
+                user: counter.user,
+                visibility: counter.visibility,
+                reasons: counter.reasons
+            });
         }
+
+        counters = counters;
     }
 
     async function addCounter(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement}) {
@@ -30,6 +47,8 @@
         });
         console.log(await response.json());
     }
+
+    let counters: CounterType[] = [];
 </script>
 
 <button on:click={get}>GET</button>
@@ -39,4 +58,7 @@
         <input type="text" name="label" placeholder="default" />
     </label>
     <button type="submit">ADD COUNTER</button>
+    {#each counters as counter}
+        <Counter data={counter} />
+    {/each}
 </form>
