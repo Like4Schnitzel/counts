@@ -28,8 +28,10 @@ export async function openDb () {
     weight REAL,
     unit TEXT,
     culprit VARCHAR(32),
-    added_at INTEGER,
-    FOREIGN KEY(counter) REFERENCES Counters(id)
+    added_at INTEGER DEFAULT CURRENT_TIMESTAMP,
+    added_by VARCHAR(32),
+    FOREIGN KEY(counter) REFERENCES Counters(id),
+    FOREIGN KEY(added_by) REFERENCES Users(name)
   );
   CREATE TABLE IF NOT EXISTS Sessions (
     id TEXT PRIMARY KEY,

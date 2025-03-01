@@ -36,11 +36,12 @@ export const actions = {
     addReason: async ({ cookies, request }) => {
         try {
             const body = await request.json();
-            console.log(body);
-            await db.run(`INSERT INTO Reasons (counter, reason, weight, unit, culprit) VALUES (?, ?, ?, ?, ?);`,
-                body.counter, body.reason, body.weight, body.unit, body.culprit
+            const sessionId = cookies.get('session-id');
+            const username = (await db.get(`SELECT name FROM Users INNER JOIN Sessions ON id = ? AND user = name;`, sessionId)).name;
+            const reason = await db.get(`INSERT INTO Reasons (counter, reason, weight, unit, culprit, added_by) VALUES (?, ?, ?, ?, ?, ?) RETURNING *;`,
+                body.counter, body.reason, body.weight, body.unit, body.culprit, username
             );
-            return sendFormActionData({ success: true });
+            return sendFormActionData(reason);
         } catch (e) {
             return handleFormActionServerError(e);
         }
