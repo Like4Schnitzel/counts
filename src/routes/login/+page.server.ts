@@ -1,4 +1,4 @@
-import { generateSession, handleServerError, sendFormActionData } from "$lib";
+import { generateSession, handleFormActionServerError, sendFormActionData } from "$lib";
 import { openDb } from "$lib/db";
 import type { LogInBody, Session } from "$lib/types";
 import { fail } from "@sveltejs/kit";
@@ -27,7 +27,7 @@ export const actions = {
             `, body.username, sha512(body.password));
             return sendFormActionData({ user: body });
         } catch (e) {
-            return handleServerError(e);
+            return handleFormActionServerError(e);
         }
     },
     login: async ({cookies, request}) => {
@@ -69,7 +69,7 @@ export const actions = {
     
             return sendFormActionData({ session });
         } catch (e) {
-            return handleServerError(e);
+            return handleFormActionServerError(e);
         }
     }
 }

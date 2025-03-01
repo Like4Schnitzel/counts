@@ -3,10 +3,16 @@ import type { Session } from "./types";
 import { sha512 } from "js-sha512";
 import * as aesjs from 'aes-js';
 
-export function handleServerError(e: unknown) {
+export function handleFormActionServerError(e: unknown) {
     console.error(e);
     let errorMessage = e instanceof Error ? e.message : null;
     return fail(500, { message: errorMessage });
+}
+
+export function handleNormalServerError(e: unknown) {
+    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : null;
+    return json({ message: errorMessage }, { status: 500 });
 }
 
 export function generateSession(user: string): Session {

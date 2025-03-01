@@ -29,6 +29,17 @@
         console.log(await response.json());
     }
 
+    async function deleteCounter(id: number) {
+        const response = await fetch('./api/counters', {
+            method: 'DELETE',
+            credentials: "include",
+            body: JSON.stringify({
+                id
+            })
+        });
+        console.log(await response.json());
+    }
+
     // TODO calculate the actual fucking count fucking dogshit im sick of this project i hate everyone kill yourself if youre reading this
 </script>
 
@@ -51,4 +62,7 @@
             <option value="PUBLIC">PUBLIC</option>
         </select>
     </div>
+    <button on:click={() => {deleteCounter(data.id)}}>
+        Delete Counter
+    </button>
 </div>

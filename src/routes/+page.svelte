@@ -64,7 +64,7 @@
         <input type="text" name="label" placeholder="default" />
     </label>
     <button type="submit">ADD COUNTER</button>
-    {#each counters as counter}
-        <Counter data={counter} />
-    {/each}
 </form>
+{#each counters as counter}
+    <Counter data={counter} />
+{/each}

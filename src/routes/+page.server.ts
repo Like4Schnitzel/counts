@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { openDb } from '$lib/db.js';
-import { handleServerError, sendFormActionData } from '$lib';
+import { handleFormActionServerError, sendFormActionData } from '$lib';
 
 const db = await openDb();
 
@@ -30,7 +30,7 @@ export const actions = {
             console.log(counter);
             return sendFormActionData(counter);
         } catch (e) {
-            return handleServerError(e);
+            return handleFormActionServerError(e);
         }
     },
     addReason: async ({ cookies, request }) => {
@@ -42,7 +42,7 @@ export const actions = {
             );
             return sendFormActionData({ success: true });
         } catch (e) {
-            return handleServerError(e);
+            return handleFormActionServerError(e);
         }
     }
 }

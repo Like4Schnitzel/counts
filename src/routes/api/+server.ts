@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { openDb } from "$lib/db";
-import { handleServerError } from "$lib";
+import { handleFormActionServerError, handleNormalServerError } from "$lib";
 import type { Counter } from "$lib/types";
 
 const db = await openDb();
@@ -49,8 +49,6 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
         //await new Promise((res, rej) => setTimeout(res, 300));
         return json({ counters: allCounters }, { status: 200 });
     } catch (e: unknown) {
-        console.error(e);
-        const errorMessage = e instanceof Error ? e.message : null;
-        return json({ message: errorMessage }, { status: 500 });
+        return handleNormalServerError(e);
     }
 }
