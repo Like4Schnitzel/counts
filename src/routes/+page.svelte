@@ -10,16 +10,22 @@
         })
         counters = [];
         const data = await response.json();
-        const encryptionKey = localStorage.getItem("data-encryption-key");
+        const encryptionKey = localStorage.getItem("data-encryption-key")!;
         for (const counter of data.counters as CounterType[]) {
             let decryptedLabel;
             if (counter.visibility === "PRIVATE") {
                 const encryptedLabel = counter.label;
-                decryptedLabel = aesDecryptString512(encryptedLabel, encryptionKey!);
+                decryptedLabel = aesDecryptString512(encryptedLabel, encryptionKey);
             } else {
                 decryptedLabel = counter.label;
             }
-            
+
+            for (const reason of counter.reasons) {
+                if (reason.unit) reason.unit = aesDecryptString512(reason.unit, encryptionKey);
+                if (reason.reason) reason.reason = aesDecryptString512(reason.reason, encryptionKey);
+                if (reason.culprit) reason.culprit = aesDecryptString512(reason.culprit, encryptionKey);
+            }
+
             counters.push({
                 id: counter.id,
                 label: decryptedLabel,

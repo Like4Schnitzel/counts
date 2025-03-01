@@ -12,7 +12,6 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
         const counterDict: { [key: number]: Counter } = {};
         const sessionId = cookies.get('session-id');
         // TODO this is so gonna break once I have reasons. live laugh race condition.
-        console.log(sessionId);
         await db.each(`
             SELECT DISTINCT label, Sessions.user, visibility, Counters.id,
                 reason, weight, unit, added_at, Reasons.id AS reason_id
