@@ -58,8 +58,10 @@
         countComponents[reason.unit] += reason.weight;
     }
     let units = Object.keys(countComponents).sort();
-    units.splice(0, 1);
-    units.push("");
+    if (units.length > 0 && units[0] === "") {
+        units.splice(0, 1);
+        units.push("");
+    }
     let countNumberString = units.reduce((a, b) => a + countComponents[b] + " " + b + " + ", "").slice(0, -2);
 </script>
 
