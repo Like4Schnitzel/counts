@@ -40,11 +40,27 @@
         console.log(await response.json());
     }
 
-    // TODO calculate the actual fucking count fucking dogshit im sick of this project i hate everyone kill yourself if youre reading this
+    let countComponents: {
+        [key: string]: number;
+    } = {};
+    for (const reason of data.reasons) {
+        if (!countComponents.hasOwnProperty(reason.unit)) {
+            countComponents[reason.unit] = 0;
+        }
+        countComponents[reason.unit]++;
+    }
+    let units = Object.keys(countComponents).sort();
+    units.splice(0, 1);
+    units.push("");
+    let countNumberString = units.reduce((a, b) => {
+        return a + countComponents[b] + " " + b + " + ";
+    }, "").slice(0, -2);
 </script>
 
 <div class="main">
-    <h1>{data.label}</h1>
+    <h1>
+        {data.label}{#if data.reasons.length > 0}: <span>{countNumberString}</span>{/if}
+    </h1>
     <div class="reasons">
     {#each data.reasons as reason}
         <Reason data={reason} />
@@ -81,7 +97,13 @@
 
     h1 {
         margin: 0;
-        font-size: 1.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    h1 span {
+        background-color: var(--color-background-layer-2);
+        border-radius: var(--border-radius);
     }
 
     form {
@@ -121,7 +143,7 @@
 
     .reasons {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         gap: 0.3rem;
         margin-bottom: 0.3rem;
     }
