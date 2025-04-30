@@ -55,7 +55,7 @@
         if (!countComponents.hasOwnProperty(reason.unit)) {
             countComponents[reason.unit] = 0;
         }
-        countComponents[reason.unit]++;
+        countComponents[reason.unit] += reason.weight;
     }
     let units = Object.keys(countComponents).sort();
     units.splice(0, 1);
