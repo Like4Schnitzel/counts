@@ -19,7 +19,7 @@
 
 <div class="main">
     <span>
-        {sign}{data.weight}
+        {sign}{Math.abs(data.weight)}
     </span>
     <span>{data.unit}</span>
     <span>{data.reason}</span>
