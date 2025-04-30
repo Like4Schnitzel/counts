@@ -60,9 +60,7 @@
     let units = Object.keys(countComponents).sort();
     units.splice(0, 1);
     units.push("");
-    let countNumberString = units.reduce((a, b) => {
-        return a + countComponents[b] + " " + b + " + ";
-    }, "").slice(0, -2);
+    let countNumberString = units.reduce((a, b) => a + countComponents[b] + " " + b + " + ", "").slice(0, -2);
 </script>
 
 <div class="main">
@@ -76,32 +74,38 @@
             </div>
         {/if}
     </div>
-    <div class="reasons">
-    {#each data.reasons as reason, i}
-        {#if expanded || i === 0}
-            <Reason data={reason} />
-        {:else if i === 1}
-            <span>...</span>
-        {/if}
-    {/each}
+    {#if data.reasons.length > 0}
+        <div class="reasons">
+            {#each data.reasons as reason, i}
+                {#if expanded || i === 0}
+                    <Reason data={reason} />
+                {:else if i === 1}
+                    <span>...</span>
+                {/if}
+            {/each}
+        </div>
+    {/if}
+    <div class="inputs">
+        <form on:submit={addReason}>
+            <input required type="number" placeholder="Weight" name="weight" value=1 />
+            <input type="text" placeholder="Unit" name="unit" />
+            <input type="text" placeholder="Reason" name="reason" />
+            <input type="text" placeholder="Culprit" name="culprit" />
+            <button type="submit">Add</button>
+        </form>
+        <div class="visibility-delete-wrapper">
+            <div>
+                <select bind:value={data.visibility}>
+                    <option value="PRIVATE">PRIVATE</option>
+                    <option value="PROTECTED">PROTECTED</option>
+                    <option value="PUBLIC">PUBLIC</option>
+                </select>
+            </div>
+            <button on:click={() => {deleteCounter(data.id)}}>
+                Delete Counter
+            </button>
+        </div>
     </div>
-    <form on:submit={addReason}>
-        <input required type="number" placeholder="Weight" name="weight" value=1 />
-        <input type="text" placeholder="Unit" name="unit" />
-        <input type="text" placeholder="Reason" name="reason" />
-        <input type="text" placeholder="Culprit" name="culprit" />
-        <button type="submit">Add</button>
-    </form>
-    <div>
-        <select bind:value={data.visibility}>
-            <option value="PRIVATE">PRIVATE</option>
-            <option value="PROTECTED">PROTECTED</option>
-            <option value="PUBLIC">PUBLIC</option>
-        </select>
-    </div>
-    <button on:click={() => {deleteCounter(data.id)}}>
-        Delete Counter
-    </button>
 </div>
 
 <style>
@@ -116,6 +120,9 @@
         padding: 0.5rem;
         border-radius: var(--border-radius);
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .header-wrapper {
@@ -188,5 +195,18 @@
         background-color: var(--color-background-layer-2);
         border-radius: var(--border-radius);
         text-align: center;
+    }
+
+    .inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .visibility-delete-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        gap: 0.5rem;
     }
 </style>
