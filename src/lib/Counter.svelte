@@ -40,6 +40,14 @@
         console.log(await response.json());
     }
 
+    async function expandReasons() {
+        expanded = !expanded;
+        expandButtonText = expanded ? "Hide Reasons" : "Show Reasons";
+    }
+
+    let expanded = false;
+    let expandButtonText = "Show Reasons";
+
     let countComponents: {
         [key: string]: number;
     } = {};
@@ -58,12 +66,23 @@
 </script>
 
 <div class="main">
-    <h1>
-        {data.label}{#if data.reasons.length > 0}: <span>{countNumberString}</span>{/if}
-    </h1>
+    <div class="header-wrapper">
+        <h1>
+            {data.label}{#if data.reasons.length > 0}: <span>{countNumberString}</span>{/if}
+        </h1>
+        {#if data.reasons.length > 1}
+            <div class="expand-button">
+                <button on:click={expandReasons}>{expandButtonText}</button>
+            </div>
+        {/if}
+    </div>
     <div class="reasons">
-    {#each data.reasons as reason}
-        <Reason data={reason} />
+    {#each data.reasons as reason, i}
+        {#if expanded || i === 0}
+            <Reason data={reason} />
+        {:else if i === 1}
+            <span>...</span>
+        {/if}
     {/each}
     </div>
     <form on:submit={addReason}>
@@ -86,6 +105,10 @@
 </div>
 
 <style>
+    :root {
+        --reason-header-font-weight: 500;
+    }
+    
     .main {
         background-color: var(--color-background-layer-1);
         width: 60rem;
@@ -95,10 +118,23 @@
         box-sizing: border-box;
     }
 
+    .header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .header-wrapper button {
+        font-size: 2rem;
+        font-weight: var(--reason-header-font-weight);
+        text-decoration: underline;
+    }
+
     h1 {
         margin: 0;
         font-size: 2rem;
         margin-bottom: 0.5rem;
+        font-weight: var(--reason-header-font-weight);
     }
 
     h1 span {
@@ -143,8 +179,14 @@
 
     .reasons {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: 0.3rem;
         margin-bottom: 0.3rem;
+    }
+
+    .reasons span {
+        background-color: var(--color-background-layer-2);
+        border-radius: var(--border-radius);
+        text-align: center;
     }
 </style>

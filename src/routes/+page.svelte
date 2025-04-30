@@ -28,6 +28,10 @@
                 reason.added_at = new Date(reason.added_at);
             }
 
+            // sort reasons by date
+            // the server already returns them sorted, just from oldest to newest. We want the opposite.
+            counter.reasons.reverse();
+
             counters.push({
                 id: counter.id,
                 label: decryptedLabel,
