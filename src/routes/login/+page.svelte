@@ -72,22 +72,77 @@
     }
 </script>
 
-<div>
-    <p>Log In: </p>
-    <form on:submit={() => tryLogin(usernameLogIn, passwordLogIn)}>
-        <input type="text" name="username" bind:value={usernameLogIn} />
-        <input type="password" name="password" bind:value={passwordLogIn} />
-        <button type="submit">Submit</button>
-    </form>
+<div class="main">
+    <div>
+        <p>Log In: </p>
+        <form on:submit={() => tryLogin(usernameLogIn, passwordLogIn)}>
+            <input placeholder="username" type="text" name="username" bind:value={usernameLogIn} />
+            <input placeholder="password" type="password" name="password" bind:value={passwordLogIn} />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div>
+        <p>Sign Up: </p>
+        <form on:submit={() => signUp(usernameSignUp, passwordSignUp)}>
+            <input placeholder="username" type="text" name="username-sign-up" bind:value={usernameSignUp} />
+            <input placeholder="password" type="password" name="password-sign-up" bind:value={passwordSignUp} />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <p>{signUpError}</p>
+    <p>{logInError}</p>
 </div>
 
-<div>
-    <p>Sign Up: </p>
-    <form on:submit={() => signUp(usernameSignUp, passwordSignUp)}>
-        <input type="text" name="username-sign-up" bind:value={usernameSignUp} />
-        <input type="password" name="password-sign-up" bind:value={passwordSignUp} />
-        <button type="submit">Submit</button>
-    </form>
-</div>
 
-<p>{signUpError}<br/>{logInError}</p>
+<style>
+    :global(body) {
+        height: 100vh;
+    }
+    
+    p {
+        font-weight: var(--default-font-weight);
+        font-size: calc(var(--default-font-size) * 1.25);
+        margin: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .main {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin: 0 auto;
+        padding-top: 2rem;
+        height: 100%;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .main div {
+        background-color: var(--color-background-layer-1);
+        width: fit-content;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+    }
+
+    button,
+    input {
+        background-color: var(--color-background-layer-2);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--color-text);
+        font-size: var(--default-font-size);
+        font-weight: var(--default-font-weight);
+        margin-bottom: 0.5rem;
+    }
+
+    button:hover {
+        background-color: var(--color-background-layer-2-hover);
+    }
+
+    button:active {
+        background-color: var(--color-background-layer-2-active);
+    }
+</style>

@@ -43,11 +43,13 @@
     // TODO calculate the actual fucking count fucking dogshit im sick of this project i hate everyone kill yourself if youre reading this
 </script>
 
-<div>
+<div class="main">
     <h1>{data.label}</h1>
+    <div class="reasons">
     {#each data.reasons as reason}
         <Reason data={reason} />
     {/each}
+    </div>
     <form on:submit={addReason}>
         <input required type="number" placeholder="Weight" name="weight" value=1 />
         <input type="text" placeholder="Unit" name="unit" />
@@ -66,3 +68,61 @@
         Delete Counter
     </button>
 </div>
+
+<style>
+    .main {
+        background-color: var(--color-background-layer-1);
+        width: 60rem;
+        max-width: 100%;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        box-sizing: border-box;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 100%;
+        gap: 0.5rem;
+        justify-content: space-evenly;
+    }
+
+    form * {
+        flex-grow: 1;
+    }
+
+    input,
+    select,
+    button {
+        background-color: var(--color-background-layer-2);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--color-text);
+        font-weight: var(--default-font-weight);
+        outline: none;
+    }
+
+    select:hover,
+    button:hover {
+        background-color: var(--color-background-layer-2-hover);
+    }
+
+    input:hover,
+    input:focus,
+    select:active,
+    button:active {
+        background-color: var(--color-background-layer-2-active);
+    }
+
+    .reasons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+</style>

@@ -40,7 +40,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
                     weight: row.weight,
                     unit: row.unit,
                     id: row.reason_id,
-                    added_at: new Date(),
+                    added_at: row.added_at,
                     counter_id: row.id,
                     culprit: row.culprit
                 });
