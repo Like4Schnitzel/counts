@@ -96,6 +96,9 @@
             <button type="submit">Add</button>
         </form>
         <div class="visibility-delete-wrapper">
+            <button on:click={() => {deleteCounter(data.id)}}>
+                Delete Counter
+            </button>
             <div>
                 <select bind:value={data.visibility}>
                     <option value="PRIVATE">PRIVATE</option>
@@ -103,9 +106,6 @@
                     <option value="PUBLIC">PUBLIC</option>
                 </select>
             </div>
-            <button on:click={() => {deleteCounter(data.id)}}>
-                Delete Counter
-            </button>
         </div>
     </div>
 </div>
@@ -175,7 +175,10 @@
     }
 
     select:hover,
-    button:hover {
+    button:hover,
+    select:hover,
+    select:focus,
+    button:focus-visible {
         background-color: var(--color-background-layer-2-hover);
     }
 
@@ -207,8 +210,6 @@
 
     .visibility-delete-wrapper {
         display: flex;
-        flex-direction: row-reverse;
-        justify-content: start;
         gap: 0.5rem;
     }
 </style>

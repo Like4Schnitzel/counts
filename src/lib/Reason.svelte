@@ -93,9 +93,11 @@
         margin-right: 0.1rem;
         color: var(--color-text);
         cursor: default;
+        outline: none;
     }
 
-    button:hover {
+    button:hover,
+    button:focus-visible {
         background-color: var(--color-background-layer-3-hover);
     }
 

@@ -139,7 +139,8 @@
         outline: none;
     }
 
-    button:hover {
+    button:hover,
+    button:focus-visible {
         background-color: var(--color-background-layer-2-hover);
     }
 

@@ -119,7 +119,8 @@
         font-weight: var(--default-font-weight);
     }
 
-    button:hover {
+    button:hover,
+    button:focus-visible {
         background-color: var(--color-background-layer-1-hover);
     }
 
