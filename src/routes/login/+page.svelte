@@ -72,31 +72,32 @@
     }
 </script>
 
-<div class="main">
-    <div>
-        <p>Log In: </p>
-        <form on:submit={() => tryLogin(usernameLogIn, passwordLogIn)}>
-            <input placeholder="username" type="text" name="username" bind:value={usernameLogIn} />
-            <input placeholder="password" type="password" name="password" bind:value={passwordLogIn} />
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+<div class="legally-not-a-body">
+    <div class="main">
+        <div>
+            <p>Log In: </p>
+            <form on:submit={() => tryLogin(usernameLogIn, passwordLogIn)}>
+                <input placeholder="username" type="text" name="username" bind:value={usernameLogIn} />
+                <input placeholder="password" type="password" name="password" bind:value={passwordLogIn} />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
 
-    <div>
-        <p>Sign Up: </p>
-        <form on:submit={() => signUp(usernameSignUp, passwordSignUp)}>
-            <input placeholder="username" type="text" name="username-sign-up" bind:value={usernameSignUp} />
-            <input placeholder="password" type="password" name="password-sign-up" bind:value={passwordSignUp} />
-            <button type="submit">Submit</button>
-        </form>
+        <div>
+            <p>Sign Up: </p>
+            <form on:submit={() => signUp(usernameSignUp, passwordSignUp)}>
+                <input placeholder="username" type="text" name="username-sign-up" bind:value={usernameSignUp} />
+                <input placeholder="password" type="password" name="password-sign-up" bind:value={passwordSignUp} />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <p>{signUpError}</p>
+        <p>{logInError}</p>
     </div>
-    <p>{signUpError}</p>
-    <p>{logInError}</p>
 </div>
 
-
 <style>
-    :global(body) {
+    .legally-not-a-body {
         height: 100vh;
     }
     
