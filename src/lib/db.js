@@ -35,7 +35,7 @@ export async function openDb () {
   );
   CREATE TABLE IF NOT EXISTS Sessions (
     id TEXT PRIMARY KEY,
-    user VARCHAR(32) PRIMARY KEY,
+    user VARCHAR(32),
     expires_by INTEGER,
     FOREIGN KEY(user) REFERENCES Users(name)
   );
