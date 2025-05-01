@@ -136,12 +136,15 @@
         font-size: var(--default-font-size);
         font-weight: var(--default-font-weight);
         margin-bottom: 0.5rem;
+        outline: none;
     }
 
     button:hover {
         background-color: var(--color-background-layer-2-hover);
     }
 
+    input:hover,
+    input:focus,
     button:active {
         background-color: var(--color-background-layer-2-active);
     }
